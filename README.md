@@ -16,26 +16,28 @@ import path from "path";
 
 export default defineConfig({
     plugins: [
-        /**
-         *  Required: Output directory of "vite build"
-         */
-        staticDir: path.join(__dirname, "dist"),
+        htmlPrerender({
+            /**
+             * Required: Output directory of "vite build"
+             */
+            staticDir: path.join(__dirname, "dist"),
         
-        /**
-         * Required: List of routes to pre-render.
-         */
-        routes: ["/", "/about"],
+            /**
+             * Required: List of routes to pre-render.
+             */
+            routes: ["/", "/about"],
 
-        /**
-         * Optional: To minify html. Uses https://github.com/kangax/html-minifier.
-         */
-        minify: {
-            collapseBooleanAttributes: true,
-            collapseWhitespace: true,
-            decodeEntities: true,
-            keepClosingSlash: true,
-            sortAttributes: true
-        }
+            /**
+             * Optional: To minify html. Uses https://github.com/kangax/html-minifier.
+             */
+            minify: {
+                collapseBooleanAttributes: true,
+                collapseWhitespace: true,
+                decodeEntities: true,
+                keepClosingSlash: true,
+                sortAttributes: true
+            }
+        })
     ]
 });
 ```
