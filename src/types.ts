@@ -19,8 +19,7 @@ export interface HtmlPrerenderOptions {
     minify?: Options;
 }
 
-export type RenderedRoutes = Array<{
+export type RenderedRoute = {
     route: string;
     html: string;
-    output: string;
-}>;
+};
