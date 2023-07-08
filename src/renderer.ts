@@ -14,18 +14,9 @@ export default class Renderer {
 
     async init(): Promise<void> {
         const options: PuppeteerLaunchOptions = {
-            headless: true,
+            headless: "new",
             args: ["--no-sandbox", "--disable-setuid-sandbox"]
         };
-
-        // Handle use case for Apple Silicon until Puppeteer supports it.
-        // Also make sure to have PUPPETEER_EXPERIMENTAL_CHROMIUM_MAC_ARM=true environment variable set.
-        // https://dev.to/tnzk/install-puppeteer-on-macbook-pro-with-apple-silicon-m1-3kc
-        if (process.arch === "arm64") {
-            const dir = process.env.PUPPETEER_EXECUTABLE_PATH;
-            console.log("[vite-plugin-html-prerender] Using Chromium instance from:", dir);
-            options.executablePath = dir;
-        }
 
         this._browser = await puppeteer.launch(options);
     }
