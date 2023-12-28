@@ -4,6 +4,9 @@ import Server from "./server";
 import Renderer from "./renderer";
 import { minify } from "html-minifier";
 
+const port = 0;
+const defaultSelector = "#root";
+
 const htmlPrerender = (options: HtmlPrerenderOptions): Plugin => {
     return {
         name: "vite-plugin-html-prerender",
@@ -15,19 +18,18 @@ const htmlPrerender = (options: HtmlPrerenderOptions): Plugin => {
     };
 };
 
-const emitRendered = (options: HtmlPrerenderOptions): void => {
-    const port = 17581;
+const emitRendered = async (options: HtmlPrerenderOptions): Promise<void> => {
     const server = new Server(port);
-    const renderer = new Renderer(port);
+    const renderer = new Renderer();
 
-    server.init(options.staticDir).then(async () => {
+    await server.init(options.staticDir).then(async () => {
         console.log("\n[vite-plugin-html-prerender] Starting headless browser...");
-        return renderer.init();
+        return await renderer.init();
     }).then(async () => {
         const renderedRoutes: RenderedRoute[] = [];
         for (let route of options.routes) {
             console.log("[vite-plugin-html-prerender] Pre-rendering route:", route);
-            renderedRoutes.push(await renderer.renderRoute(route));
+            renderedRoutes.push(await renderer.renderRoute(route, server.runningPort, options.selector || defaultSelector));
         }
         return renderedRoutes;
     }).then(renderedRoutes => {

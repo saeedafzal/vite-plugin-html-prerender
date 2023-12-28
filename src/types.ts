@@ -17,6 +17,13 @@ export interface HtmlPrerenderOptions {
      * Optional.
      */
     minify?: Options;
+
+    /**
+     * The query selector for the root element to wait for.
+     * Defaults to "#root".
+     * Optional.
+     */
+    selector?: string;
 }
 
 export type RenderedRoute = {

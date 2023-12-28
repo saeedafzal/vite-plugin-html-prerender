@@ -18,7 +18,7 @@ export default defineConfig({
     plugins: [
         htmlPrerender({
             /**
-             * Required: Output directory of "vite build"
+             * Required: Output directory of `vite build`.
              */
             staticDir: path.join(__dirname, "dist"),
         
@@ -26,6 +26,11 @@ export default defineConfig({
              * Required: List of routes to pre-render.
              */
             routes: ["/", "/about"],
+
+            /**
+             * Optional: Query selector to wait for. Defaults to `#root`.
+             */
+            selector: "main",
 
             /**
              * Optional: To minify html. Uses https://github.com/kangax/html-minifier.

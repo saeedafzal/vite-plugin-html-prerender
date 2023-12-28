@@ -5,12 +5,7 @@ import { RenderedRoute } from "./types";
 
 export default class Renderer {
 
-    private readonly _port: number;
     private _browser?: Browser;
-
-    constructor(port: number) {
-        this._port = port;
-    }
 
     async init(): Promise<void> {
         const options: PuppeteerLaunchOptions = {
@@ -25,17 +20,17 @@ export default class Renderer {
         await this._browser?.close();
     }
 
-    async renderRoute(route: string): Promise<RenderedRoute> {
+    async renderRoute(route: string, port: number, selector: string): Promise<RenderedRoute> {
         if (!this._browser) {
             throw Error("Headless browser instance not started. Failed to prerender.");
         }
 
         const page = await this._browser.newPage();
-        await page.goto(`http://localhost:${ this._port }${ route }`);
-        await page.waitForSelector("#root", {timeout: 10000});
+        await page.goto(`http://localhost:${port}${route}`);
+        await page.waitForSelector(selector, { timeout: 10000 });
         const html = await page.content();
 
-        return {route, html};
+        return { route, html };
     }
 
     async saveToFile(staticDir: string, renderedRoute: RenderedRoute): Promise<void> {
@@ -43,7 +38,7 @@ export default class Renderer {
         const directory = path.dirname(target);
 
         if (!fs.existsSync(directory)) {
-            fs.mkdirSync(directory, {recursive: true});
+            fs.mkdirSync(directory, { recursive: true });
         }
 
         fs.writeFileSync(target, renderedRoute.html);
